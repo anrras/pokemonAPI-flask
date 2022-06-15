@@ -1,0 +1,4 @@
+flask
+pandas
+sklearn
+flask-swagger-ui
