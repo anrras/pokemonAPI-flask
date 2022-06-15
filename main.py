@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 import pandas as pd
 import json 
 
@@ -25,20 +25,18 @@ def getPokemons():
 
     if key == None or value == None:
         return jsonify({'pokemons': json.load(open('pokemon.json'))})
-    elif key == 'Name' and value == 'pikachu':
-        return sortJson('pokemon.json', key, sort)
+   
+    else:
+        output_json =  filterJson(key, value, sort)
+        return Response(json.dumps(output_json),  mimetype='application/json')
 
-# Sort a json file by a key
-def sortJson(jsonFilename, key, sort):
-    # reading the json file  
-    json_df = pd.read_json(jsonFilename)
-    # sorting the dataframe by the key
-    json_df.sort_values(by=key, ascending=sort)
-    # converting the dataframe to json
-    json_df.to_json('resultJson.json', orient='records')
-
-    return jsonify({'pokemons': json.load(open('resultJson.json'))})
-
+ # Filter the json file with the key and value
+def filterJson(key, value, sort):
+    input_dict = json.load(open('pokemon.json'))
+    # Filter python objects with list comprehensions
+    output_dict = [x for x in input_dict if x[key.capitalize()] == value.capitalize()]
+    # Transform python object back into json
+    return output_dict
 
 # Defining the function to convert CSV file to JSON file  
 def csvToJson(csvFilename, jsonFilename):
