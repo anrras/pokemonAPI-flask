@@ -34,7 +34,7 @@ def getPokemons():
 def filterJson(key, value, sort):
     input_dict = json.load(open('pokemon.json'))
     # Filter python objects with list comprehensions
-    output_dict = [x for x in input_dict if x[key.capitalize()] == value.capitalize()]
+    output_dict = [x for x in input_dict if x[key] == value]
     # Transform python object back into json
     return output_dict
 
